@@ -1,0 +1,13 @@
+{
+  "name": "root",
+  "private": true,
+  "scripts": {
+   "start": "node start.js"
+  },
+  "devDependencies": {
+    "lerna": "^3.5.1"
+  },
+  "dependencies": {
+    "shelljs": "^0.8.3"
+  }
+}

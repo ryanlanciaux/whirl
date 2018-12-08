@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
+const BUTTON_PADDING = 25;
+
 // See https://inclusive-components.design/a-content-slider/
 const GalleryWrapper = styled.div`
   width: ${props => props.width};
@@ -55,6 +57,8 @@ const Instructions = styled.div`
 
 const GalleryList = styled.ul`
   display: flex;
+  margin: 0;
+  padding: 0;
 `;
 
 const GalleryListItem = styled.li`
@@ -70,6 +74,8 @@ const Figure = styled.figure`
   justify-content: center;
   width: 100%;
   height: 100%;
+  margin: 0;
+  padding: 0;
 `;
 
 const Image = styled.img`
@@ -101,7 +107,11 @@ const Previous = onPrevious => (
     id="previous"
     aria-label="previous"
     onClick={onPrevious}
-    style={{ padding: 25, marginLeft: 25, marginRight: 25 }}
+    style={{
+      padding: BUTTON_PADDING,
+      marginLeft: BUTTON_PADDING,
+      marginRight: BUTTON_PADDING
+    }}
   >
     Previous
   </button>
@@ -126,7 +136,7 @@ const ControlsList = styled.ul`
   width: ${props => props.width};
   justify-content: space-between;
   padding: 0;
-  top: calc(${props => props.height} / 2);
+  top: calc((${props => props.height} / 2) - ${BUTTON_PADDING * 2}px);
 `;
 
 export const Controls = ({
@@ -144,6 +154,8 @@ export const Controls = ({
 );
 
 export class Whirl extends React.Component {
+  static defaultProps = { label: "Image gallery" };
+
   element = React.createRef();
 
   componentDidMount() {
@@ -185,7 +197,7 @@ export class Whirl extends React.Component {
   };
 
   render() {
-    const { children: slides, width, height } = this.props;
+    const { children: slides, width, height, label } = this.props;
 
     console.log("WIDTH/HEIGHT", width, height);
     return (
@@ -193,7 +205,7 @@ export class Whirl extends React.Component {
         <Gallery
           ref={this.element}
           role="region"
-          aria-label="gallery"
+          aria-label={label}
           tabIndex="0"
           aria-describedby="focus"
           onClick={() => this.gotoSlideByIndex(1)}

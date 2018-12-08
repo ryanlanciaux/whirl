@@ -1,6 +1,6 @@
 {
   "name": "example",
-  "version": "0.1.0",
+  "version": "1.0.0-alpha.0",
   "private": true,
   "description": "Example of React-whirl",
   "main": "index.js",
@@ -13,6 +13,6 @@
     "parcel-bundler": "^1.10.3",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
-    "react-whirl": "^1.0.0"
+    "react-whirl": "^1.0.0-alpha.0"
   }
 }

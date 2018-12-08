@@ -5,6 +5,7 @@
   "description": "Example of React-whirl",
   "main": "index.js",
   "scripts": {
+    "start": "yarn parcel index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

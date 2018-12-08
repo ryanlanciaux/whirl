@@ -7,7 +7,8 @@
   "scripts": {
     "clean": "rm -rf lib",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rollup -c && cp -r src lib",
+    "start": "rollup -c --watch",
+    "build": "rollup -c",
     "prepublish": "yarn clean && yarn build"
   },
   "author": "Ryan Lanciaux",
@@ -22,5 +23,8 @@
     "@babel/preset-react": "^7.0.0",
     "rollup": "^0.67.4",
     "rollup-plugin-babel": "^4.0.3"
+  },
+  "dependencies": {
+    "styled-components": "^4.1.2"
   }
 }

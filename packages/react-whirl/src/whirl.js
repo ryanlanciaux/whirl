@@ -210,10 +210,14 @@ export class Whirl extends React.Component {
       previousProps.autoScroll !== this.props.autoScroll ||
       previousProps.scrollTimer !== this.props.scrollTimer
     ) {
-      this.removeTimer();
-      this.setupTimer();
+      this.resetTimer();
     }
   }
+
+  resetTimer = () => {
+    this.removeTimer();
+    this.setupTimer();
+  };
 
   handleKeydown = e => {
     e.preventDefault();
@@ -234,7 +238,7 @@ export class Whirl extends React.Component {
   };
 
   removeTimer = () => {
-    window.clearClear(this.timer);
+    window.clearInterval(this.timer);
   };
 
   getSlideWidth = () => {
@@ -261,6 +265,7 @@ export class Whirl extends React.Component {
 
     // if on the last slide go to the first -- otherwise goto next
     this.setState({ slideIndex: total - 1 === index ? 0 : index + 1 });
+    this.resetTimer();
   };
 
   onPrevious = () => {
@@ -269,6 +274,7 @@ export class Whirl extends React.Component {
 
     // if on the first slide go to the last -- otherwise goto previous
     this.setState({ slideIndex: index === 0 ? total - 1 : index - 1 });
+    this.resetTimer();
   };
 
   render() {

@@ -193,7 +193,39 @@ export class Whirl extends React.Component {
     if (this.props.autoScroll) {
       this.setupTimer();
     }
+
+    this.element.current.addEventListener("keydown", this.handleKeydown);
   }
+
+  componentWillUnmount() {
+    this.element.current.removeEventListener("keydown", this.handleKeydown);
+  }
+
+  componentDidUpdate(previousProps, previousState) {
+    if (previousState.slideIndex !== this.state.slideIndex) {
+      this.gotoSlideByIndex(this.state.slideIndex);
+    }
+
+    if (
+      previousProps.autoScroll !== this.props.autoScroll ||
+      previousProps.scrollTimer !== this.props.scrollTimer
+    ) {
+      this.removeTimer();
+      this.setupTimer();
+    }
+  }
+
+  handleKeydown = e => {
+    e.preventDefault();
+
+    if (e.key === "ArrowLeft") {
+      this.onPrevious();
+    }
+
+    if (e.key === "ArrowRight") {
+      this.onNext();
+    }
+  };
 
   setupTimer = () => {
     this.timer = window.setInterval(() => {
@@ -238,20 +270,6 @@ export class Whirl extends React.Component {
     // if on the first slide go to the last -- otherwise goto previous
     this.setState({ slideIndex: index === 0 ? total - 1 : index - 1 });
   };
-
-  componentDidUpdate(previousProps, previousState) {
-    if (previousState.slideIndex !== this.state.slideIndex) {
-      this.gotoSlideByIndex(this.state.slideIndex);
-    }
-
-    if (
-      previousProps.autoScroll !== this.props.autoScroll ||
-      previousProps.scrollTimer !== this.props.scrollTimer
-    ) {
-      this.removeTimer();
-      this.setupTimer();
-    }
-  }
 
   render() {
     const {

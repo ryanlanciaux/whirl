@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 
 const BUTTON_PADDING = 25;
@@ -9,7 +10,7 @@ const GalleryWrapper = styled.div`
   height: ${props => props.height};
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  position: relative;
 `;
 
 const Gallery = styled.div`
@@ -122,7 +123,11 @@ const Next = onNext => (
     id="next"
     aria-label="next"
     onClick={onNext}
-    style={{ padding: 25, marginLeft: 25, marginRight: 25 }}
+    style={{
+      padding: BUTTON_PADDING,
+      marginLeft: BUTTON_PADDING,
+      marginRight: BUTTON_PADDING
+    }}
   >
     Next
   </button>
@@ -145,22 +150,60 @@ export const Controls = ({
   previous,
   next,
   width,
-  height
+  height,
+  style
 }) => (
-  <ControlsList width={width} height={height} aria-hidden>
+  <ControlsList width={width} height={height} aria-hidden style={style}>
     <li>{previous(onPrevious)}</li>
     <li>{next(onNext)}</li>
   </ControlsList>
 );
 
 export class Whirl extends React.Component {
-  static defaultProps = { label: "Image gallery" };
+  static defaultProps = {
+    label: "Image gallery",
+    next: Next,
+    previous: Previous,
+    autoScroll: true,
+    scrollTimer: 5000,
+    controlsStyle: null
+  };
+
+  static propTypes = {
+    width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    height: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+      .isRequired,
+    label: PropTypes.string,
+    next: PropTypes.func,
+    previous: PropTypes.func,
+    children: PropTypes.oneOfType([
+      PropTypes.node,
+      PropTypes.arrayOf(PropTypes.node)
+    ]),
+    autoScroll: PropTypes.bool,
+    scrollTimer: PropTypes.number,
+    controlsStyle: PropTypes.object
+  };
+
+  state = { slideIndex: 0 };
 
   element = React.createRef();
 
   componentDidMount() {
-    this.getCurrentIndex();
+    if (this.props.autoScroll) {
+      this.setupTimer();
+    }
   }
+
+  setupTimer = () => {
+    this.timer = window.setInterval(() => {
+      this.onNext();
+    }, this.props.scrollTimer);
+  };
+
+  removeTimer = () => {
+    window.clearClear(this.timer);
+  };
 
   getSlideWidth = () => {
     const totalWidth = this.element.current.scrollWidth;
@@ -185,7 +228,7 @@ export class Whirl extends React.Component {
     const total = this.props.children.length;
 
     // if on the last slide go to the first -- otherwise goto next
-    this.gotoSlideByIndex(total - 1 === index ? 0 : index + 1);
+    this.setState({ slideIndex: total - 1 === index ? 0 : index + 1 });
   };
 
   onPrevious = () => {
@@ -193,13 +236,34 @@ export class Whirl extends React.Component {
     const total = this.props.children.length;
 
     // if on the first slide go to the last -- otherwise goto previous
-    this.gotoSlideByIndex(index === 0 ? total - 1 : index - 1);
+    this.setState({ slideIndex: index === 0 ? total - 1 : index - 1 });
   };
 
-  render() {
-    const { children: slides, width, height, label } = this.props;
+  componentDidUpdate(previousProps, previousState) {
+    if (previousState.slideIndex !== this.state.slideIndex) {
+      this.gotoSlideByIndex(this.state.slideIndex);
+    }
 
-    console.log("WIDTH/HEIGHT", width, height);
+    if (
+      previousProps.autoScroll !== this.props.autoScroll ||
+      previousProps.scrollTimer !== this.props.scrollTimer
+    ) {
+      this.removeTimer();
+      this.setupTimer();
+    }
+  }
+
+  render() {
+    const {
+      children: slides,
+      width,
+      height,
+      label,
+      next,
+      previous,
+      controlsStyle
+    } = this.props;
+
     return (
       <GalleryWrapper width={width} height={height}>
         <Gallery
@@ -208,7 +272,6 @@ export class Whirl extends React.Component {
           aria-label={label}
           tabIndex="0"
           aria-describedby="focus"
-          onClick={() => this.gotoSlideByIndex(1)}
         >
           <GalleryList>{slides}</GalleryList>
         </Gallery>
@@ -220,10 +283,11 @@ export class Whirl extends React.Component {
         <Controls
           onNext={this.onNext}
           onPrevious={this.onPrevious}
-          previous={Previous}
-          next={Next}
+          previous={previous}
+          next={next}
           width={width}
           height={height}
+          style={controlsStyle}
         />
       </GalleryWrapper>
     );

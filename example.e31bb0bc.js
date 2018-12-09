@@ -31648,6 +31648,18 @@ function (_React$Component) {
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "element", _react.default.createRef());
 
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "handleKeydown", function (e) {
+      e.preventDefault();
+
+      if (e.key === "ArrowLeft") {
+        _this.onPrevious();
+      }
+
+      if (e.key === "ArrowRight") {
+        _this.onNext();
+      }
+    });
+
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "setupTimer", function () {
       _this.timer = window.setInterval(function () {
         _this.onNext();
@@ -31706,6 +31718,13 @@ function (_React$Component) {
       if (this.props.autoScroll) {
         this.setupTimer();
       }
+
+      this.element.current.addEventListener("keydown", this.handleKeydown);
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      this.element.current.removeEventListener("keydown", this.handleKeydown);
     }
   }, {
     key: "componentDidUpdate",
@@ -31906,7 +31925,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50486" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60553" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

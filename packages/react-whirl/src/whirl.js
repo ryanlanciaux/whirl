@@ -1,16 +1,20 @@
-import React from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { FixedAspectRatio } from "./FixedAspectRatio";
 
 const BUTTON_PADDING = 25;
 
+const OverallWrapper = styled.div`
+  position: relative;
+`;
 // See https://inclusive-components.design/a-content-slider/
 const GalleryWrapper = styled.div`
   width: ${props => props.width};
   height: ${props => props.height};
+  position: relative;
   display: flex;
   flex-direction: column;
-  position: relative;
 `;
 
 const Gallery = styled.div`
@@ -159,6 +163,12 @@ export const Controls = ({
   </ControlsList>
 );
 
+const stretchInstructionStyles = {
+  position: "absolute",
+  bottom: 0,
+  width: "100%"
+};
+
 export class Whirl extends React.Component {
   static defaultProps = {
     label: "Image gallery",
@@ -195,10 +205,12 @@ export class Whirl extends React.Component {
     }
 
     this.element.current.addEventListener("keydown", this.handleKeydown);
+    window.addEventListener("resize", this.onResize);
   }
 
   componentWillUnmount() {
     this.element.current.removeEventListener("keydown", this.handleKeydown);
+    window.removeEventListener("resize", this.onResize);
   }
 
   componentDidUpdate(previousProps, previousState) {
@@ -214,13 +226,21 @@ export class Whirl extends React.Component {
     }
   }
 
+  onResize = () => {
+    // we want to reset the timer everytime resize happens so we're not changing slides while resizing
+    this.resetTimer();
+    this.gotoSlideByIndex(this.state.slideIndex);
+  };
+
   resetTimer = () => {
     this.removeTimer();
     this.setupTimer();
   };
 
   handleKeydown = e => {
-    e.preventDefault();
+    if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+      e.preventDefault();
+    }
 
     if (e.key === "ArrowLeft") {
       this.onPrevious();
@@ -241,7 +261,15 @@ export class Whirl extends React.Component {
     window.clearInterval(this.timer);
   };
 
+  getScrollWidth = () => {
+    if (!this.element.current) {
+      return 0;
+    }
+  };
   getSlideWidth = () => {
+    if (!this.element.current) {
+      return;
+    }
     const totalWidth = this.element.current.scrollWidth;
     const items = this.props.children.length;
     return totalWidth / items;
@@ -253,6 +281,10 @@ export class Whirl extends React.Component {
   };
 
   getCurrentIndex = () => {
+    if (!this.element.current) {
+      return;
+    }
+
     const slideWidth = this.getSlideWidth();
     const scrollPosition = this.element.current.scrollLeft;
 
@@ -285,35 +317,38 @@ export class Whirl extends React.Component {
       label,
       next,
       previous,
-      controlsStyle
+      controlsStyle,
+      stretch
     } = this.props;
 
+    const Wrapper = stretch ? FixedAspectRatio : GalleryWrapper;
     return (
-      <GalleryWrapper width={width} height={height}>
-        <Gallery
-          ref={this.element}
-          role="region"
-          aria-label={label}
-          tabIndex="0"
-          aria-describedby="focus"
-        >
-          <GalleryList>{slides}</GalleryList>
-        </Gallery>
-        <Instructions>
-          <p id="hoverfocus">Scroll or use arrow keys for more</p>
-          <p id="hover">Scroll for more</p>
-          <p id="focus">Use arrow keys for more</p>
-        </Instructions>
+      <OverallWrapper>
+        <Wrapper width={width} height={height} stretch={stretch}>
+          <Gallery
+            ref={this.element}
+            role="region"
+            aria-label={label}
+            tabIndex="0"
+            aria-describedby="focus"
+          >
+            <GalleryList>{slides}</GalleryList>
+          </Gallery>
+          <Instructions style={stretch ? stretchInstructionStyles : {}}>
+            <p id="hoverfocus">Scroll or use arrow keys for more</p>
+            <p id="hover">Scroll for more</p>
+            <p id="focus">Use arrow keys for more</p>
+          </Instructions>
+        </Wrapper>
         <Controls
           onNext={this.onNext}
           onPrevious={this.onPrevious}
           previous={previous}
           next={next}
-          width={width}
-          height={height}
+          width={stretch ? "100%" : width}
           style={controlsStyle}
         />
-      </GalleryWrapper>
+      </OverallWrapper>
     );
   }
 }

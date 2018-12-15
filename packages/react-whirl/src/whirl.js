@@ -6,6 +6,7 @@ import { FixedAspectRatio } from "./FixedAspectRatio";
 const BUTTON_PADDING = 25;
 
 const OverallWrapper = styled.div`
+  width: 100%;
   position: relative;
 `;
 // See https://inclusive-components.design/a-content-slider/

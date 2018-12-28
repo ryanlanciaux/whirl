@@ -1,6 +1,6 @@
 {
   "name": "react-whirl",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A carousel component",
   "main": "lib/whirl.js",
   "module": "lib/whirl.es.js",

@@ -5,6 +5,21 @@ import { FixedAspectRatio } from "./FixedAspectRatio";
 
 const BUTTON_PADDING = 25;
 
+const hidden = `
+  position: absolute !important;
+  clip: rect(1px,1px,1px,1px) !important;
+  clip: rect(1px,1px,1px,1px) !important;
+  height: 1px !important;
+  width: 1px !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  margin: 0 !important; 
+`;
+
+const Definition = styled.aside`
+  ${hidden};
+`;
+
 const OverallWrapper = styled.div`
   width: 100%;
   position: relative;
@@ -98,12 +113,16 @@ export const ImageContent = ({
   imgSrc,
   caption,
   description,
+  descriptionId,
   showCaption = false
 }) => (
   <GalleryListItem>
     <Figure>
-      <Image src={imgSrc} alt={description} />
-      {showCaption && <Caption>{caption}</Caption>}
+      <Image src={imgSrc} aria-describedby={descriptionId} alt={caption} />
+      <Caption>
+        {showCaption && { caption }}
+        <Definition id={descriptionId}>{description}</Definition>
+      </Caption>
     </Figure>
   </GalleryListItem>
 );
@@ -158,7 +177,7 @@ export const Controls = ({
   height,
   style
 }) => (
-  <ControlsList width={width} height={height} aria-hidden style={style}>
+  <ControlsList width={width} height={height} style={style}>
     <li>{previous(onPrevious)}</li>
     <li>{next(onNext)}</li>
   </ControlsList>
@@ -175,7 +194,7 @@ export class Whirl extends React.Component {
     label: "Image gallery",
     next: Next,
     previous: Previous,
-    autoScroll: true,
+    autoScroll: false,
     scrollTimer: 5000,
     controlsStyle: null
   };

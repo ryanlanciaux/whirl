@@ -42,32 +42,38 @@ const Example = () => (
         <ImageContent
           imgSrc="http://www.placecage.com/300/300"
           caption="Nicolas Cage @ 300x300"
-          description="Nicolas Cage image"
+          description="First Nicolas Cage image"
+          descriptionId="first"
         />
         <ImageContent
           imgSrc="http://www.fillmurray.com/300/300"
           caption="Bill Murray @ 300x300"
-          description="Bill Murray image"
+          description="First Bill Murray image"
+          descriptionId="second"
         />
         <ImageContent
           imgSrc="http://www.placecage.com/400/400"
           caption="Nicolas Cage @ 400x400"
-          description="Nicolas Cage image"
+          description="Second Nicolas Cage image"
+          descriptionId="third"
         />
         <ImageContent
           imgSrc="http://www.fillmurray.com/400/400"
           caption="Bill Murray @ 400x400"
-          description="Bill Murray image"
+          description="Second Bill Murray image"
+          descriptionId="fourth"
         />
         <ImageContent
           imgSrc="http://www.placecage.com/500/500"
           caption="Nicolas Cage @ 500x500"
-          description="Nicolas Cage image"
+          description="Third Nicolas Cage image"
+          descriptionId="fifth"
         />
         <ImageContent
           imgSrc="http://www.fillmurray.com/500/500"
           caption="Bill Murray @ 500x500"
-          description="Bill Murray image"
+          description="Third Bill Murray image"
+          descriptionId="sixth"
         />
       </Whirl>
     </div>
@@ -89,32 +95,38 @@ const Example = () => (
       <ImageContent
         imgSrc="http://www.placecage.com/300/300"
         caption="Nicolas Cage @ 300x300"
-        description="Nicolas Cage image"
+        description="First Nicolas Cage image"
+        descriptionId="first"
       />
       <ImageContent
         imgSrc="http://www.fillmurray.com/300/300"
         caption="Bill Murray @ 300x300"
-        description="Bill Murray image"
+        description="First Bill Murray image"
+        descriptionId="second"
       />
       <ImageContent
         imgSrc="http://www.placecage.com/400/400"
         caption="Nicolas Cage @ 400x400"
-        description="Nicolas Cage image"
+        description="Second Nicolas Cage image"
+        descriptionId="third"
       />
       <ImageContent
         imgSrc="http://www.fillmurray.com/400/400"
         caption="Bill Murray @ 400x400"
-        description="Bill Murray image"
+        description="Second Bill Murray image"
+        descriptionId="fourth"
       />
       <ImageContent
         imgSrc="http://www.placecage.com/500/500"
         caption="Nicolas Cage @ 500x500"
-        description="Nicolas Cage image"
+        description="Third Nicolas Cage image"
+        descriptionId="fifth"
       />
       <ImageContent
         imgSrc="http://www.fillmurray.com/500/500"
         caption="Bill Murray @ 500x500"
-        description="Bill Murray image"
+        description="Third Bill Murray image"
+        descriptionId="sixth"
       />
     </Whirl>
     <p>

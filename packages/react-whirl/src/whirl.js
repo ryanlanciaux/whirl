@@ -272,9 +272,11 @@ export class Whirl extends React.Component {
   };
 
   setupTimer = () => {
-    this.timer = window.setInterval(() => {
-      this.onNext();
-    }, this.props.scrollTimer);
+    if (this.props.autoScroll === true) {
+      this.timer = window.setInterval(() => {
+        this.onNext();
+      }, this.props.scrollTimer);
+    }
   };
 
   removeTimer = () => {
